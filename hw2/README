@@ -1,0 +1,3 @@
+stoogeTime.cpp uses some C++11 types to generate random numbers, so please compile that program with the -std=c++11 or -std=c++0x flag.
+
+The stoogesort program will create a stooge.out file with the output, while stoogeTime will output a formatted list of running times to the screen for each value of n.
