@@ -1,1 +1,5 @@
-To compile the code, run `rustc -o activity activity.rs` (without the backticks). The output binary will be named activity, so it can be run using ./activity like any other program.
+To compile the code, run:
+    rustc -o activity activity.rs
+
+To run the program (in the same directory as it was compiled):
+    ./activity
