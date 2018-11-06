@@ -40,7 +40,11 @@ struct WrestlerNode {
 // Implemented using C++'s implementation of a FIFO queue.
 // Sets the type of nodes in the graph to the opposite of their parent's type;
 // so if a vertex's parent is a BabyFace, that vertex will become a Heel.
-void bfs(WrestlerNode* start) {
+//
+// Returns true if it's possible to designate some nodes as babyfaces and others
+// as heels and have the edges connect a babyface and a heel, with the given
+// start node. Otherwise, returns false.
+bool bfs(WrestlerNode* start) {
     std::queue<WrestlerNode*> q;
     q.push(start);
     // Arbitrary choice to set first wrestler to BabyFace
@@ -65,12 +69,20 @@ void bfs(WrestlerNode* start) {
 
                 // Add v to the back of the queue
                 q.push(v);
+            // v has already been visited and has its type set, so check to make sure
+            // its type is different from its parent's (u's) type. If they're the same,
+            // we can stop, since we know it's not possible to find the requested
+            // designation.
+            } else if (u->type == v->type) {
+                return false;
             }
 
             // u is completely processed now
             u->status = NodeStatus::Processed;
         }
     }
+
+    return true;
 }
 
 // Uses Breadth-First Search to determine if it is possible to designate
@@ -83,17 +95,7 @@ bool rivalries(std::vector<WrestlerNode*> nodes) {
     // unvisited nodes
     for (const auto& u : nodes) {
         if (u->status == NodeStatus::NotDiscovered) {
-            bfs(u);
-        }
-    }
-
-    // Since all the wrestlers' types are now set, loop through the adjacency
-    // list and confirm that nodes adjacent to each other have different wrestler
-    // types. If any pair of nodes has the same type, we know it is not possible to
-    // have every edge connect a babyface and a heel.
-    for (const auto& u : nodes) {
-        for (const auto& v : u->adjacent_nodes) {
-            if (u->type == v->type) {
+            if (!bfs(u)) {
                 return false;
             }
         }
@@ -221,6 +223,11 @@ int main(int argc, char** argv) {
     // Otherwise, just print No
     } else {
         std::cout << "No" << std::endl;
+    }
+
+    // Free all the dynamically allocated WrestlerNodes
+    for (const auto& u : nodes) {
+        delete u;
     }
 
     return 0;
