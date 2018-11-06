@@ -1,0 +1,7 @@
+To compile the code, run:
+    g++ -std=c++0x -o wrestler wrestler.cpp
+
+To execute the program with an input file named input.txt, run:
+    ./wrestler input.txt
+
+(input.txt can be replaced with any file name, of course)
